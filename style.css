@@ -1,0 +1,21 @@
+@font-face {
+  font-family: PixelifySans;
+  src: url("/font/PixelifySans-Medium.ttf");
+}
+
+body {
+  font-family: "PixelifySans", sans-serif;
+}
+main {
+  display: block;
+  margin: 0 auto;
+  max-width: 970px;
+  & li {
+    font-size: 18px;
+  }
+}
+canvas {
+  display: block;
+  margin: 50px auto;
+  border: 2px solid black;
+}
