@@ -18,16 +18,28 @@ var config = {
   },
 };
 
+// Game objects
 let ground;
 let player;
-let cursors;
 let enemies;
-let scoreText;
+
+// Input
+let cursors;
+let pointer;
+
+// Score-related
 let score = 0;
-let retryText;
-let gameOver = false;
-let spawnEvent;
+let scoreText;
 let scoreEvent;
+
+// Game state
+let gameOver = false;
+let gameOverText;
+
+// Events
+let spawnEvent;
+
+// Sounds
 let jumpSfx;
 let gameOverSound;
 
@@ -49,8 +61,13 @@ function preload() {
 }
 
 function create() {
+  // Game state
+  gameOver = false;
+
+  // Background
   this.add.image(400, 150, "sky");
 
+  // Ground and player
   ground = this.physics.add.staticImage(400, 320, "ground");
   player = this.physics.add
     .sprite(80, 100, "player")
@@ -58,20 +75,32 @@ function create() {
     .setBounce(0.1)
     .setFlipX(true)
     .setSize(14, 24);
+
+  // Enemy group
   enemies = this.physics.add.group();
-  scoreText = this.add.text(15, 15, "Score:", {
+
+  // Text
+  scoreText = this.add.text(15, 15, "Score: 0", {
     fill: "#fff",
     font: "500 32px PixelifySans",
   });
+
+  gameOverText = this.add.text(15, 50, "GAME OVER", {
+    font: "500 32px PixelifySans",
+    fill: "#ff0000",
+  });
+  gameOverText.visible = false;
+
+  // Sound effects
   jumpSfx = this.sound.add("jumpSfx");
   gameOverSound = this.sound.add("gameOver");
 
-  cursors = this.input.keyboard.createCursorKeys();
-
+  // Physics collisions
   this.physics.add.collider(player, ground);
   this.physics.add.collider(enemies, ground);
   this.physics.add.overlap(player, enemies, hit, null, this);
 
+  // Events
   spawnEvent = this.time.addEvent({
     delay: 1000,
     callback: spawnEnemyWithRandomDelay,
@@ -86,9 +115,10 @@ function create() {
     loop: true,
   });
 
+  // Animations
   this.anims.create({
     key: "playerWalk",
-    frames: this.anims.generateFrameNumbers("player", { start: 0, end: 1 }), // Frame range
+    frames: this.anims.generateFrameNumbers("player", { start: 0, end: 1 }),
     frameRate: 5,
     repeat: -1,
   });
@@ -96,23 +126,30 @@ function create() {
 
   this.anims.create({
     key: "enemyWalk",
-    frames: this.anims.generateFrameNumbers("enemy", { start: 21, end: 23 }), // Ajusta el rango de fotogramas según tu spritesheet
+    frames: this.anims.generateFrameNumbers("enemy", { start: 21, end: 23 }),
     frameRate: 5,
     repeat: -1,
   });
 
-  this.input.on("pointerdown", function () {
-    if (player.body.touching.down) {
-      jumpSfx.play();
-      player.setVelocityY(-500);
-    }
-  });
+  // Input
+  cursors = this.input.keyboard.createCursorKeys();
+  pointer = this.input.activePointer;
 }
 
 function update() {
   if (cursors.space.isDown && player.body.touching.down) {
     jumpSfx.play();
     player.setVelocityY(-500);
+  }
+
+  console.log(gameOver);
+
+  if (pointer.isDown && player.body.touching.down) {
+    jumpSfx.play();
+    player.setVelocityY(-500);
+    if (gameOver) {
+      this.scene.restart();
+    }
   }
 
   enemies.getChildren().forEach((enemy) => {
@@ -157,24 +194,12 @@ function hit() {
   this.physics.pause();
 
   player.setTint(0xff0000);
-  retryText = this.add.text(15, 50, "GAME OVER", {
-    font: "500 32px PixelifySans",
-    fill: "#ff0000",
-  });
+  gameOverText.visible = true;
+
+  player.anims.stop();
 
   scoreEvent.remove();
   spawnEvent.remove();
-  player.anims.stop();
 
   gameOverSound.play();
-
-  this.input.once(
-    "pointerdown",
-    function () {
-      if (gameOver) {
-        this.scene.restart();
-      }
-    },
-    this
-  );
 }
