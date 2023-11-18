@@ -134,6 +134,22 @@ function create() {
   // Input
   cursors = this.input.keyboard.createCursorKeys();
   pointer = this.input.activePointer;
+
+  // Handle touch events
+  this.input.on(
+    "pointerdown",
+    function (pointer) {
+      if (pointer.isDown && player.body.touching.down) {
+        jumpSfx.play();
+        player.setVelocityY(-500);
+
+        if (gameOver) {
+          this.scene.restart();
+        }
+      }
+    },
+    this
+  );
 }
 
 function update() {
