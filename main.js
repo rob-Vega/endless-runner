@@ -80,7 +80,7 @@ function create() {
   enemies = this.physics.add.group();
 
   // Text
-  scoreText = this.add.text(15, 15, "Score: 0", {
+  scoreText = this.add.text(15, 15, "Puntos: 0", {
     fill: "#fff",
     font: "500 32px PixelifySans",
   });
@@ -184,7 +184,7 @@ function spawnEnemyWithRandomDelay() {
 
 function addScore() {
   score += 1;
-  scoreText.setText(`Score: ${score}`);
+  scoreText.setText(`Puntos: ${score}`);
 }
 
 function hit() {
