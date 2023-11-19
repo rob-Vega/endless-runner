@@ -68,10 +68,6 @@ function preload() {
     frameWidth: 24,
     frameHeight: 24,
   });
-  // this.load.spritesheet("retryButton", "assets/tilemapCharacters.png", {
-  //   frameWidth: 24,
-  //   frameHeight: 24,
-  // });
   this.load.audio("jumpSfx", "audio/sfxJump.mp3");
   this.load.audio("gameOver", "audio/gameOver.wav");
 }
