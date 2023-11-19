@@ -2,6 +2,7 @@ import * as Phaser from "phaser";
 
 var config = {
   type: Phaser.AUTO,
+  parent: "game",
   width: window.innerWidth > 800 ? 800 : window.innerWidth,
   height: 300,
   pixelArt: true,
@@ -81,7 +82,7 @@ function create() {
 
   // Text
   scoreText = this.add.text(15, 15, "Puntos: 0", {
-    fill: "#fff",
+    fill: "#000",
     font: "500 32px PixelifySans",
   });
 
@@ -118,7 +119,7 @@ function create() {
   // Animations
   this.anims.create({
     key: "playerWalk",
-    frames: this.anims.generateFrameNumbers("player", { start: 0, end: 1 }),
+    frames: this.anims.generateFrameNumbers("player", { start: 4, end: 5 }),
     frameRate: 5,
     repeat: -1,
   });
